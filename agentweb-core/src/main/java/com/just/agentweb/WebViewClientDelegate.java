@@ -18,10 +18,12 @@ package com.just.agentweb;
 
 import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.webkit.ClientCertRequest;
 import android.webkit.HttpAuthHandler;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -250,14 +252,15 @@ public class WebViewClientDelegate extends WebViewClient {
         }
         super.onReceivedLoginRequest(view, realm, account, args);
     }
-    
+
     @Override
     public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
         if (mDelegate != null) {
-            mDelegate.onRenderProcessGone(view, detail);
-            return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return mDelegate.onRenderProcessGone(view, detail);
+            }
         }
         return super.onRenderProcessGone(view, detail);
     }
-    
+
 }

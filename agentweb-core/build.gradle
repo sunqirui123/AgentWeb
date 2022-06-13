@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
@@ -52,4 +53,25 @@ dependencies {
     compileOnly 'com.google.android.material:material:1.0.0'
     compileOnly 'androidx.legacy:legacy-support-v4:1.0.0'
     compileOnly fileTree(include: ['*.jar'], dir: 'providedLibs')
+}
+
+
+// Because the components are created only during the afterEvaluate phase, you must
+// configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.bytedance.ttgame'
+                artifactId = 'agentweb-core'
+                version = '5.0.0-androids-alpha01'
+            }
+        }
+    }
 }
