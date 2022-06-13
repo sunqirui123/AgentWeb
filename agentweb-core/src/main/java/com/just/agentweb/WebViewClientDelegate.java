@@ -250,4 +250,14 @@ public class WebViewClientDelegate extends WebViewClient {
         }
         super.onReceivedLoginRequest(view, realm, account, args);
     }
+    
+    @Override
+    public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
+        if (mDelegate != null) {
+            mDelegate.onRenderProcessGone(view, detail);
+            return;
+        }
+        return super.onRenderProcessGone(view, detail);
+    }
+    
 }
